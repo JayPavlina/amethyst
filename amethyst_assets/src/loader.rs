@@ -56,6 +56,11 @@ impl Loader {
             .insert(id.into(), Arc::new(source) as Arc<dyn Source>);
     }
 
+    /// Get the default source of the `Loader`.
+    pub fn get_default_source(&self) -> Arc<dyn Source> {
+        self.source(String::new().as_str())
+    }
+
     /// Set the default source of the `Loader`.
     pub fn set_default_source<S>(&mut self, source: S)
     where
