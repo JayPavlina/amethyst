@@ -9,6 +9,8 @@ use syn::{parse_macro_input, DeriveInput};
 mod event_reader;
 mod prefab_data;
 
+pub use specs_derive::Component;
+
 #[proc_macro_derive(EventReader, attributes(reader))]
 pub fn event_reader_derive(input: TokenStream) -> TokenStream {
     let ast = parse_macro_input!(input as DeriveInput);
