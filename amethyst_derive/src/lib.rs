@@ -25,7 +25,7 @@ pub fn prefab_data_derive(input: TokenStream) -> TokenStream {
     let ast = parse_macro_input!(input as DeriveInput);
     let gen = prefab_data::impl_prefab_data(&ast);
     gen.into()
-}
+}å
 
 /// This allows the use of an enum as an ID for the `Widgets` resource. One
 /// variant has to be marked as the default variant with `#[widget_id_default]
