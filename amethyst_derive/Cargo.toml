@@ -19,7 +19,6 @@ travis-ci = { repository = "amethyst/amethyst" }
 syn = { version = "0.15", features = ["visit"] }
 quote = "0.6"
 proc-macro2 = "0.4"
-specs-derive = "0.4"
 
 [dev-dependencies]
 amethyst_core = { path = "../amethyst_core", version = "0.5.0" }
