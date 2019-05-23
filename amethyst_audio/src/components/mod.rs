@@ -6,6 +6,7 @@ use amethyst_assets::PrefabData;
 use amethyst_core::{
     ecs::prelude::{Entity, Read, WriteStorage},
     math::Point3,
+    Float,
 };
 use amethyst_error::Error;
 
@@ -23,7 +24,7 @@ mod audio_listener;
 pub struct AudioPrefab {
     emitter: bool,
     /// Left, Right
-    listener: Option<(Point3<f32>, Point3<f32>)>,
+    listener: Option<(Point3<Float>, Point3<Float>)>,
 }
 
 impl<'a> PrefabData<'a> for AudioPrefab {

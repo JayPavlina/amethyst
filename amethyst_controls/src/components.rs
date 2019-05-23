@@ -1,5 +1,8 @@
 use amethyst_assets::PrefabData;
-use amethyst_core::ecs::prelude::{Component, Entity, HashMapStorage, NullStorage, WriteStorage};
+use amethyst_core::{
+    ecs::prelude::{Component, Entity, HashMapStorage, NullStorage, WriteStorage},
+    Float,
+};
 use amethyst_error::Error;
 
 use serde::{Deserialize, Serialize};
@@ -19,7 +22,7 @@ pub struct ArcBallControlTag {
     /// The target entity which the camera will orbit
     pub target: Entity,
     /// The distance from the target entity that the camera should orbit at.
-    pub distance: f32,
+    pub distance: Float,
 }
 
 impl Component for ArcBallControlTag {
@@ -58,7 +61,7 @@ impl<'a> PrefabData<'a> for ControlTagPrefab {
                 entity,
                 ArcBallControlTag {
                     target: entities[index],
-                    distance,
+                    distance: Float::from(distance),
                 },
             )?;
         }

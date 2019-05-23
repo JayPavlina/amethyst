@@ -53,7 +53,7 @@ This guide covers the basic usage of assets into Amethyst for existing supported
     # use amethyst::{
     #     prelude::*,
     #     renderer::{DisplayConfig, Pipeline, RenderBundle, Stage},
-    #     ui::{DrawUi, UiBundle},
+    #     ui::{DrawUi, UiBundle, StringBindings},
     #     utils::application_root_dir,
     # };
     #
@@ -73,7 +73,7 @@ This guide covers the basic usage of assets into Amethyst for existing supported
         // ..
 
         let game_data = GameDataBuilder::default()
-            .with_bundle(UiBundle::<String, String>::new())?
+            .with_bundle(UiBundle::<StringBindings>::new())?
             .with_bundle(
                 RenderBundle::new(pipeline, Some(display_config))
                     .with_sprite_sheet_processor()
@@ -212,10 +212,10 @@ This guide covers the basic usage of assets into Amethyst for existing supported
     }
     ```
 
-[doc_asset]: https://www.amethyst.rs/doc/latest/doc/amethyst_assets/trait.Asset.html
-[doc_asset_get]: https://www.amethyst.rs/doc/latest/doc/amethyst_assets/struct.AssetStorage.html#method.get
-[doc_loader]: https://www.amethyst.rs/doc/latest/doc/amethyst_assets/struct.Loader.html
-[doc_load]: https://www.amethyst.rs/doc/latest/doc/amethyst_assets/struct.Loader.html#method.load
-[doc_processor_system]: https://www.amethyst.rs/doc/latest/doc/amethyst_assets/struct.Processor.html
-[doc_read_resource]: https://www.amethyst.rs/doc/latest/doc/specs/world/struct.World.html#method.read_resource
-[doc_search_format]: https://www.amethyst.rs/doc/latest/doc/amethyst/?search=Format
+[doc_asset]: https://docs-src.amethyst.rs/stable/amethyst_assets/trait.Asset.html
+[doc_asset_get]: https://docs-src.amethyst.rs/stable/amethyst_assets/struct.AssetStorage.html#method.get
+[doc_loader]: https://docs-src.amethyst.rs/stable/amethyst_assets/struct.Loader.html
+[doc_load]: https://docs-src.amethyst.rs/stable/amethyst_assets/struct.Loader.html#method.load
+[doc_processor_system]: https://docs-src.amethyst.rs/stable/amethyst_assets/struct.Processor.html
+[doc_read_resource]: https://docs-src.amethyst.rs/stable/specs/world/struct.World.html#method.read_resource
+[doc_search_format]: https://docs-src.amethyst.rs/stable/amethyst/?search=Format

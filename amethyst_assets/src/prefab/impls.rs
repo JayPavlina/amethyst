@@ -1,6 +1,6 @@
 use amethyst_core::{
     ecs::{Entity, WriteStorage},
-    GlobalTransform, Named, Transform,
+    Named, Transform,
 };
 use amethyst_error::Error;
 
@@ -45,27 +45,8 @@ where
     }
 }
 
-impl<'a> PrefabData<'a> for GlobalTransform {
-    type SystemData = WriteStorage<'a, Self>;
-    type Result = ();
-
-    fn add_to_entity(
-        &self,
-        entity: Entity,
-        storage: &mut Self::SystemData,
-        _: &[Entity],
-        _: &[Entity],
-    ) -> Result<(), Error> {
-        storage.insert(entity, self.clone()).map(|_| ())?;
-        Ok(())
-    }
-}
-
 impl<'a> PrefabData<'a> for Transform {
-    type SystemData = (
-        WriteStorage<'a, Transform>,
-        WriteStorage<'a, GlobalTransform>,
-    );
+    type SystemData = WriteStorage<'a, Transform>;
     type Result = ();
 
     fn add_to_entity(
@@ -75,8 +56,7 @@ impl<'a> PrefabData<'a> for Transform {
         _: &[Entity],
         _: &[Entity],
     ) -> Result<(), Error> {
-        storages.1.insert(entity, GlobalTransform::default())?;
-        storages.0.insert(entity, self.clone()).map(|_| ())?;
+        storages.insert(entity, self.clone()).map(|_| ())?;
         Ok(())
     }
 }

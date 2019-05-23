@@ -1,4 +1,4 @@
-use gfx_glyph::{HorizontalAlign, VerticalAlign};
+use glyph_brush::{HorizontalAlign, VerticalAlign};
 use serde::{Deserialize, Serialize};
 
 #[cfg(feature = "profiler")]
@@ -11,7 +11,7 @@ use amethyst_core::{
     },
     HierarchyEvent, Parent, ParentHierarchy,
 };
-use amethyst_renderer::ScreenDimensions;
+use amethyst_window::ScreenDimensions;
 
 use super::UiTransform;
 
@@ -67,7 +67,7 @@ impl Anchor {
         }
     }
 
-    /// Vertical align. Used by the ui `Pass`.
+    /// Vertical align. Used by the `UiGlyphsSystem`.
     pub(crate) fn vertical_align(&self) -> VerticalAlign {
         match self {
             Anchor::TopLeft => VerticalAlign::Top,
@@ -82,7 +82,7 @@ impl Anchor {
         }
     }
 
-    /// Horizontal align. Used by the ui `Pass`.
+    /// Horizontal align. Used by the `UiGlyphsSystem`.
     pub(crate) fn horizontal_align(&self) -> HorizontalAlign {
         match self {
             Anchor::TopLeft => HorizontalAlign::Left,
@@ -214,12 +214,10 @@ impl<'a> System<'a> for UiTransformSystem {
         for entity in hierarchy.all() {
             {
                 let self_dirty = self_transform_modified.contains(entity.id());
-                let parent_entity = parents
-                    .get(*entity)
-                    .expect(
-                        "Unreachable: All entities in `ParentHierarchy` should also be in `Parent`",
-                    )
-                    .entity;
+                let parent_entity = match parents.get(*entity) {
+                    Some(p) => p.entity,
+                    None => continue, // Skip this entity iteration, as its dirty
+                };
                 let parent_dirty = self_transform_modified.contains(parent_entity.id());
                 if parent_dirty || self_dirty || screen_resized {
                     let parent_transform_copy = transforms.get(parent_entity).cloned();
@@ -291,6 +289,9 @@ impl<'a> System<'a> for UiTransformSystem {
                                 transform.height * parent_transform_copy.pixel_height;
                         }
                     }
+                    let pivot_norm = transform.pivot.norm_offset();
+                    transform.pixel_x += transform.pixel_width * -pivot_norm.0;
+                    transform.pixel_y += transform.pixel_height * -pivot_norm.1;
                 }
             }
             // Populate the modifications we just did.
@@ -376,5 +377,8 @@ where
                 transform.pixel_height = transform.height * screen_dim.height();
             }
         }
+        let pivot_norm = transform.pivot.norm_offset();
+        transform.pixel_x += transform.pixel_width * -pivot_norm.0;
+        transform.pixel_y += transform.pixel_height * -pivot_norm.1;
     }
 }

@@ -6,7 +6,10 @@ use amethyst_animation::{
     AnimationPrefab, AnimationSetPrefab, InterpolationFunction, InterpolationPrimitive, Sampler,
     SamplerPrimitive, TransformChannel,
 };
-use amethyst_core::Transform;
+use amethyst_core::{
+    math::{convert, Vector3, Vector4},
+    Float, Transform,
+};
 
 use super::Buffers;
 use crate::error;
@@ -45,7 +48,7 @@ fn load_animation(
 fn load_channel(
     channel: &gltf::animation::Channel<'_>,
     buffers: &Buffers,
-) -> Result<(usize, TransformChannel, Sampler<SamplerPrimitive<f32>>), Error> {
+) -> Result<(usize, TransformChannel, Sampler<SamplerPrimitive<Float>>), Error> {
     use gltf::animation::util::ReadOutputs::*;
     let sampler = channel.sampler();
     let target = channel.target();
@@ -64,7 +67,10 @@ fn load_channel(
             Sampler {
                 input,
                 function: map_interpolation_type(&sampler.interpolation()),
-                output: translations.map(|t| t.into()).collect(),
+                output: translations
+                    .map(Vector3::from)
+                    .map(|t| convert::<_, Vector3<Float>>(t).into())
+                    .collect(),
             },
         )),
         Rotations(rotations) => {
@@ -74,7 +80,6 @@ fn load_channel(
             } else {
                 ty
             };
-            // gltf quat format: [x, y, z, w], our quat format: [w, x, y, z]
             Ok((
                 node_index,
                 TransformChannel::Rotation,
@@ -83,7 +88,8 @@ fn load_channel(
                     function: ty,
                     output: rotations
                         .into_f32()
-                        .map(|q| [q[3], q[0], q[1], q[2]].into())
+                        .map(Vector4::from)
+                        .map(|q| convert::<_, Vector4<Float>>(q).into())
                         .collect(),
                 },
             ))
@@ -94,7 +100,10 @@ fn load_channel(
             Sampler {
                 input,
                 function: map_interpolation_type(&sampler.interpolation()),
-                output: scales.map(|s| s.into()).collect(),
+                output: scales
+                    .map(Vector3::from)
+                    .map(|s| convert::<_, Vector3<Float>>(s).into())
+                    .collect(),
             },
         )),
         MorphTargetWeights(_) => Err(error::Error::NotImplemented.into()),

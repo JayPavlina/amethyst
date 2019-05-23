@@ -1,3 +1,4 @@
+use derivative::Derivative;
 use hibitset::BitSet;
 use serde::{Deserialize, Serialize};
 
@@ -5,10 +6,11 @@ use amethyst_assets::{PrefabData, ProgressCounter};
 use amethyst_core::{
     ecs::prelude::{Component, DenseVecStorage, Entity, WriteStorage},
     math::Matrix4,
+    Float,
 };
 use amethyst_derive::PrefabData;
 use amethyst_error::Error;
-use amethyst_renderer::JointTransformsPrefab;
+use amethyst_rendy::skinning::JointTransformsPrefab;
 
 /// Joint, attach to an entity with a `Transform`
 #[derive(Debug, Clone)]
@@ -29,11 +31,11 @@ pub struct Skin {
     /// Mesh entities that use the skin
     pub meshes: BitSet,
     /// Bind shape matrix
-    pub bind_shape_matrix: Matrix4<f32>,
+    pub bind_shape_matrix: Matrix4<Float>,
     /// Bring the mesh into the joints local coordinate system
-    pub inverse_bind_matrices: Vec<Matrix4<f32>>,
+    pub inverse_bind_matrices: Vec<Matrix4<Float>>,
     /// Scratch area holding the current joint matrices
-    pub joint_matrices: Vec<Matrix4<f32>>,
+    pub joint_matrices: Vec<Matrix4<Float>>,
 }
 
 impl Skin {
@@ -41,7 +43,7 @@ impl Skin {
     pub fn new(
         joints: Vec<Entity>,
         meshes: BitSet,
-        inverse_bind_matrices: Vec<Matrix4<f32>>,
+        inverse_bind_matrices: Vec<Matrix4<Float>>,
     ) -> Self {
         let len = joints.len();
         Skin {
@@ -95,11 +97,11 @@ pub struct SkinPrefab {
     /// Indices of `Entity`s in the `Prefab` which have `Joint`s belonging to this `Skin`
     pub joints: Vec<usize>,
     /// The bind shape matrix of the `Skin`
-    pub bind_shape_matrix: Matrix4<f32>,
+    pub bind_shape_matrix: Matrix4<Float>,
     /// Indices of the `Entity`s in the `Prefab` which have `Mesh`s using this `Skin`
     pub meshes: Vec<usize>,
     /// Inverse bind matrices of the `Joint`s
-    pub inverse_bind_matrices: Vec<Matrix4<f32>>,
+    pub inverse_bind_matrices: Vec<Matrix4<Float>>,
 }
 
 impl<'a> PrefabData<'a> for SkinPrefab {
@@ -135,7 +137,7 @@ impl<'a> PrefabData<'a> for SkinPrefab {
 }
 
 /// `PrefabData` for full skinning support
-#[derive(Clone, Default, Debug, Serialize, Deserialize, PrefabData)]
+#[derive(Clone, Debug, Default, Derivative, Serialize, Deserialize, PrefabData)]
 #[serde(default)]
 pub struct SkinnablePrefab {
     /// Place `Skin` on the `Entity`

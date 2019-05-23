@@ -154,6 +154,10 @@ let game_data = GameDataBuilder::default()
     // --snip--
     .with(systems::WinnerSystem, "winner_system", &["ball_system"]);
 #
+# let assets_dir = "/";
+# struct Pong;
+# impl SimpleState for Pong { }
+# let mut game = Application::new(assets_dir, Pong, game_data)?;
 # Ok(())
 # }
 ```
@@ -239,8 +243,12 @@ fn main() -> amethyst::Result<()> {
 #             &["paddle_system", "ball_system"],
 #         )
 #         .with(systems::WinnerSystem, "winner_system", &["ball_system"]);
-# 
-#     Ok(())
+#
+# let assets_dir = "/";
+# struct Pong;
+# impl SimpleState for Pong { }
+# let mut game = Application::new(assets_dir, Pong, game_data)?;
+# Ok(())
 }
 ```
 
@@ -664,11 +672,11 @@ fn initialise_scoreboard(world: &mut World) {
         &world.read_resource(),
     );
     let p1_transform = UiTransform::new(
-        "P1".to_string(), Anchor::TopMiddle,
+        "P1".to_string(), Anchor::TopMiddle, Anchor::TopMiddle,
         -50., -50., 1., 200., 50.,
     );
     let p2_transform = UiTransform::new(
-        "P2".to_string(), Anchor::TopMiddle,
+        "P2".to_string(), Anchor::TopMiddle, Anchor::TopMiddle,
         50., -50., 1., 200., 50.,
     );
 
@@ -724,8 +732,8 @@ it to either side, so we'll add that next!
 
 
 [font-download]: https://github.com/amethyst/amethyst/raw/master/examples/assets/font/square.ttf
-[input-handler]: https://www.amethyst.rs/doc/latest/doc/amethyst_input/struct.InputHandler.html
-[ui-bundle]: https://www.amethyst.rs/doc/latest/doc/amethyst_ui/struct.UiBundle.html
+[input-handler]: https://docs-src.amethyst.rs/stable/amethyst_input/struct.InputHandler.html
+[ui-bundle]: https://docs-src.amethyst.rs/stable/amethyst_ui/struct.UiBundle.html
 
 
 ## Updating the Scoreboard

@@ -5,8 +5,19 @@
 #[cfg(all(target_os = "emscripten", not(no_threading)))]
 compile_error!("the cfg flag \"no_threading\" is required when building for emscripten");
 
+#[macro_use]
+extern crate alga_derive;
+#[macro_use]
+extern crate serde;
+#[macro_use]
+extern crate getset;
+#[macro_use]
+extern crate derive_new;
+
+pub use alga;
 pub use approx;
 pub use nalgebra as math;
+pub use num_traits as num;
 pub use shred;
 pub use shrev;
 pub use specs as ecs;
@@ -18,6 +29,7 @@ use std::sync::Arc;
 pub use crate::{
     bundle::SystemBundle,
     event::EventReader,
+    float::Float,
     system_ext::{Pausable, SystemExt},
     timing::*,
     transform::*,
@@ -25,6 +37,8 @@ pub use crate::{
 
 pub use self::{
     axis::{Axis2, Axis3},
+    hidden::{Hidden, HiddenPropagate},
+    hide_system::HideHierarchySystem,
     named::{Named, WithNamed},
 };
 
@@ -35,6 +49,9 @@ pub mod transform;
 
 mod axis;
 mod event;
+mod float;
+mod hidden;
+mod hide_system;
 mod named;
 mod system_ext;
 

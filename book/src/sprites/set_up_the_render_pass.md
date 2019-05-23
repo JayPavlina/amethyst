@@ -32,7 +32,9 @@ fn main() -> amethyst::Result<()> {
     let pipe = Pipeline::build().with_stage(
         Stage::with_backbuffer()
             .clear_target([0., 0., 0., 1.], 1.)
-            .with_pass(DrawFlat2D::new()),
+            .with_pass(
+                DrawFlat2D::new()
+                    .with_transparency_settings(ColorMask::all(), ALPHA, None)),
     );
 
     let game_data = GameDataBuilder::default()

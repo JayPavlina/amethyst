@@ -2,10 +2,10 @@ use super::DemoState;
 use amethyst::{
     core::{
         math::{UnitQuaternion, Vector3},
-        Time, Transform,
+        Float, Time, Transform,
     },
     ecs::prelude::{Entity, Join, Read, ReadStorage, System, WriteExpect, WriteStorage},
-    renderer::{Camera, Light},
+    renderer::{camera::Camera, light::Light},
     ui::{UiFinder, UiText},
     utils::fps_counter::FPSCounter,
 };
@@ -32,16 +32,16 @@ impl<'a> System<'a> for ExampleSystem {
             data;
         let light_angular_velocity = -1.0;
         let light_orbit_radius = 15.0;
-        let light_z = 6.0;
+        let light_y = 6.0;
 
         let camera_angular_velocity = 0.1;
 
         state.light_angle += light_angular_velocity * time.delta_seconds();
         state.camera_angle += camera_angular_velocity * time.delta_seconds();
 
-        let delta_rot = UnitQuaternion::from_axis_angle(
-            &Vector3::z_axis(),
-            camera_angular_velocity * time.delta_seconds(),
+        let delta_rot: UnitQuaternion<Float> = UnitQuaternion::from_axis_angle(
+            &Vector3::y_axis(),
+            (camera_angular_velocity * time.delta_seconds()).into(),
         );
         for (_, transform) in (&camera, &mut transforms).join() {
             // Append the delta rotation to the current transform.
@@ -61,11 +61,11 @@ impl<'a> System<'a> for ExampleSystem {
         {
             transform.set_translation_xyz(
                 light_orbit_radius * state.light_angle.cos(),
+                light_y,
                 light_orbit_radius * state.light_angle.sin(),
-                light_z,
             );
 
-            point_light.color = state.light_color.into();
+            point_light.color = state.light_color;
         }
 
         if let None = self.fps_display {

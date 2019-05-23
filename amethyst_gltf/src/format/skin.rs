@@ -2,9 +2,12 @@ use std::collections::HashMap;
 
 use amethyst_animation::{JointPrefab, SkinPrefab, SkinnablePrefab};
 use amethyst_assets::Prefab;
-use amethyst_core::math::Matrix4;
+use amethyst_core::{
+    math::{convert, Matrix4},
+    Float,
+};
 use amethyst_error::Error;
-use amethyst_renderer::JointTransformsPrefab;
+use amethyst_rendy::skinning::JointTransformsPrefab;
 
 use super::Buffers;
 use crate::GltfPrefab;
@@ -30,7 +33,12 @@ pub fn load_skin(
 
     let inverse_bind_matrices = reader
         .read_inverse_bind_matrices()
-        .map(|matrices| matrices.map(|m| m.into()).collect())
+        .map(|matrices| {
+            matrices
+                .map(Matrix4::from)
+                .map(|m| convert::<_, Matrix4<Float>>(m))
+                .collect()
+        })
         .unwrap_or(vec![Matrix4::identity().into(); joints.len()]);
 
     for (_bind_index, joint_index) in joints.iter().enumerate() {
@@ -43,10 +51,7 @@ pub fn load_skin(
             .skins
             .push(skin_entity);
     }
-    let joint_transforms = JointTransformsPrefab {
-        skin: skin_entity,
-        size: joints.len(),
-    };
+    let joint_transforms = JointTransformsPrefab::new(skin_entity, joints.len());
     for mesh_index in &meshes {
         prefab
             .data_or_default(*mesh_index)

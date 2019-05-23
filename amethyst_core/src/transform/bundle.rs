@@ -1,10 +1,9 @@
 //! ECS transform bundle
 
-use crate::ecs::prelude::DispatcherBuilder;
 use amethyst_error::Error;
 use specs_hierarchy::HierarchySystem;
 
-use crate::{bundle::SystemBundle, transform::*};
+use crate::{bundle::SystemBundle, ecs::prelude::DispatcherBuilder, transform::*};
 
 /// Transform bundle
 ///
@@ -27,7 +26,9 @@ pub struct TransformBundle<'a> {
 impl<'a> TransformBundle<'a> {
     /// Create a new transform bundle
     pub fn new() -> Self {
-        Default::default()
+        TransformBundle {
+            dep: Default::default(),
+        }
     }
 
     /// Set dependencies for the `TransformSystem`

@@ -8,8 +8,8 @@ exclude = ["examples/*"]
 keywords = ["game", "engine", "audio","amethyst"]
 categories = ["audio"]
 
-documentation = "https://www.amethyst.rs/doc/latest/doc/amethyst_audio/"
-homepage = "https://www.amethyst.rs/"
+documentation = "https://docs-src.amethyst.rs/stable/amethyst_audio/"
+homepage = "https://amethyst.rs/"
 repository = "https://github.com/amethyst/amethyst"
 
 readme = "README.md"
@@ -27,8 +27,10 @@ cpal = "0.8"
 log = "0.4.6"
 rodio = "0.8"
 serde = { version = "1.0", features = ["derive"] }
-
 thread_profiler = { version = "0.3", optional = true }
+
+[dev-dependencies]
+amethyst_utils = { path = "../amethyst_utils", version = "0.5.0"}
 
 [dependencies.smallvec]
 version = "0.6"
@@ -37,3 +39,4 @@ features = ["serde"]
 [features]
 profiler = [ "thread_profiler/thread_profiler" ]
 nightly = [ "amethyst_core/nightly" ]
+float64 = ["amethyst_core/float64"]

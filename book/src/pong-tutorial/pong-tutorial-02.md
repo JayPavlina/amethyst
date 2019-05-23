@@ -390,6 +390,8 @@ fn main() -> amethyst::Result<()> {
             .with_sprite_sheet_processor()
         )?
         .with_bundle(TransformBundle::new())?;
+# let assets_dir = "/";
+# let mut game = Application::new(assets_dir, Pong, game_data)?;
 # Ok(())
 }
 ```
@@ -628,5 +630,5 @@ moving!
 
 [sb]: https://slide-rs.github.io/specs/
 [sb-storage]: https://slide-rs.github.io/specs/05_storages.html#densevecstorage
-[2d]: https://www.amethyst.rs/doc/latest/doc/amethyst_renderer/struct.Camera.html#method.standard_2d
+[2d]: https://docs-src.amethyst.rs/stable/amethyst_renderer/struct.Camera.html#method.standard_2d
 [ss]: ../images/pong_tutorial/pong_spritesheet.png
